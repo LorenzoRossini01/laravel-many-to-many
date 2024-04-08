@@ -72,7 +72,9 @@ class ProjectController extends Controller
     {
         // controllo utente
         $autenticated_user_id=Auth::id();
-        if($autenticated_user_id != $project->user_id) abort(403);
+
+        
+        if(Auth::user()->role!='admin' && $autenticated_user_id != $project->user_id) abort(403);
 
         return view('admin.projects.show', compact('project'));
     }
