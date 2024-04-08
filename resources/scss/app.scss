@@ -1,0 +1,25 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+
+.wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    main {
+        flex-grow: 1;
+    }
+}
+
+.project-show {
+    .card {
+        .card-body {
+            .row {
+                .col-6 {
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
