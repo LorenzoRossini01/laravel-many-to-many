@@ -11,6 +11,7 @@
                 <th>Autore</th>
                 <th>Descrizione</th>
                 <th>Categoria</th>
+                <th>Tags</th>
                 <th></th>
             </tr>
         </thead>
@@ -20,11 +21,13 @@
                 <td>{{$project->id}}</td>
                 <td>{{$project->title}}</td>
                 <td>{{$project->user->name}}</td>
-                <td>{{$project->description}}</td>
+                <td>{{$project->getAbstract()}}</td>
                 <td>
                     @if(@isset($project->category))
-                        <a href="{{route('admin.categories.show', $project->category)}}">{!!$project->category?->getBadge()!!}</a></td>
+                    <a href="{{route('admin.categories.show', $project->category)}}">{!!$project->category?->getBadge()!!}</a>
                     @endif
+                </td>
+                <td>{{$project->getHashtag()}}</td>
                 <td><a href="{{route('admin.projects.show', $project)}}">più dettagli...</a></td>
             </tr>
             @empty

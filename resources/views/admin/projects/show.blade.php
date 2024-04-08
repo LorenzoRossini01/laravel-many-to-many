@@ -21,6 +21,10 @@
                       <a href="{{route('admin.categories.show', $project->category)}}">{!!$project->category->getBadge()!!}</a>
                     </div>
                     <div class="my-2">
+                      <strong>Tecnologie:</strong>
+                      <p>{{$project->getHashtag()}}</p>
+                    </div>
+                    <div class="my-2">
                       <strong>Autore: </strong>
                       {{$project->user->name}}</a>
                     </div>
