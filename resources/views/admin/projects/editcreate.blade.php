@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="col-12 col-lg-6">
-                <div class="card p-2">
+                <div class="card p-2 h-100">
                     <label for="link" class="form-label">project GitHub link</label>
                     <input type="url" id="link" name="link" class="form-control @error('link') is-invalid @enderror" value="{{isset($project)? $project->link :old('link')}}">
                     
@@ -65,8 +65,8 @@
             <div class="col-12 col-lg-6">
                 <div class="card p-2">
                     <div class="row g-2">
-                        <div class="col-10">
-                            <label for="category_id" class="form-label ">Category</label>
+                        <label for="category_id" class="form-label ">Category</label>
+                        <div class="col-10 ">
                             <select name="category_id" id="category_id" class="form-select @error('category_id') is-invalid @enderror">
                                 <option value="" class="d-none">Seleziona una categoria</option>
                                 @foreach($categories as $category)
@@ -77,14 +77,28 @@
                             <div class="invalid-feedback">{{$message}}</div>
                             @enderror
                         </div>
-                        <div class="col-2 align-self-end">
+                        <div class="col-2 ">
                             <a href="{{route('admin.categories.create')}}" class="btn btn-secondary w-100">+</a>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-12 ">
+                <div class="card p-2 d-flex flex-row justify-content-between flex-wrap">
+                    @foreach($tags as $tag)
+                    <div class="col-lg-2 col-4 form-check @error('tags') is-invalid @enderror">
+                        <input type="checkbox" id="tag-{{$tag->id}}"  value="{{ $tag->id }}" name="tag[]" 
+                        {{in_array($tag->id, old('tags',$project_tags_id??[]))?'checked':'' }}>
+                        <label for="tag-{{$tag->id}}" class="form-check-label">{{$tag->label}}</label>
+                    </div>
+                    @endforeach
+                    @error("tags")
+                    <div class="invalid-feedback">{{$message}}</div>
+                    @enderror
+                </div>
+            </div>
             <div class="col-12">
-                <button class="btn btn-primary w-100 mt-2">Save project</button>
+                <button type="submit" class="btn btn-primary w-100 mt-2">Save project</button>
             </div>
         </div>
     </form>

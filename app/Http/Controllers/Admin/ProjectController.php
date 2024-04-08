@@ -7,9 +7,11 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Category;
 use App\Models\Project;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 
 class ProjectController extends Controller
@@ -41,7 +43,9 @@ class ProjectController extends Controller
     public function create()
     {
         $categories=Category::all();
-        return view('admin.projects.editcreate', compact('categories'));
+        $tags = Tag::all();
+
+        return view('admin.projects.editcreate', compact('categories','tags'));
     }
 
     /**
@@ -59,6 +63,12 @@ class ProjectController extends Controller
         $project->user_id=Auth::id();
         $project->slug=Str::slug($project->title);
         $project->save();
+
+        // dd($data['tag']);
+
+        if(Arr::exists($data, 'tag')){
+        $project->tags()->attach($data['tag']);};
+
         return redirect()->route('admin.projects.show', $project);
     }
 
@@ -92,7 +102,9 @@ class ProjectController extends Controller
         if($autenticated_user_id != $project->user_id) abort(403);
 
         $categories=Category::all();
-        return view('admin.projects.editcreate', compact('project','categories'));
+        $tags=Tag::all();
+        $project_tags_id=$project->tags->pluck('id')->toArray();
+        return view('admin.projects.editcreate', compact('project','categories', 'tags','project_tags_id'));
     }
 
     /**
@@ -115,6 +127,14 @@ class ProjectController extends Controller
         $project->user_id=Auth::id();
         $project->slug=Str::slug($project->title);
         $project->save();
+
+        
+        if(Arr::exists($data, "tag"))
+        $project->tags()->sync($data["tag"]);
+        else
+        $project->tags()->detach();
+        
+
         return redirect()->route('admin.projects.show', $project);
 
     }
@@ -131,6 +151,7 @@ class ProjectController extends Controller
         $autenticated_user_id=Auth::id();
         if($autenticated_user_id != $project->user_id) abort(403);
 
+        $project->tags()->detach();
         $project->delete();
         return redirect()->route('admin.projects.index');
 
