@@ -63,8 +63,10 @@ class ProjectController extends Controller
         // dd($data);
         $project = new Project;
         $project->fill($data);
-        $img_path=Storage::put('uploads\projects', $data['imageUrl']);
-        $project->imageUrl=$img_path;
+        if(Arr::exists($data,'imageUrl')){
+            $img_path=Storage::put('uploads\projects', $data['imageUrl']);
+            $project->imageUrl=$img_path;
+        }
         $project->user_id=Auth::id();
         $project->slug=Str::slug($project->title);
         $project->save();
@@ -131,7 +133,17 @@ class ProjectController extends Controller
         $project->fill($data);
         $project->user_id=Auth::id();
         $project->slug=Str::slug($project->title);
+
+        if(Arr::exists($data,'imageUrl')){
+            if(!empty($project->imageUrl)){
+                Storage::delete($project->imageUrl);
+            }
+            $img_path=Storage::put('uploads\projects', $data['imageUrl']);
+            $project->imageUrl=$img_path;
+        }
+
         $project->save();
+
 
         
         if(Arr::exists($data, "tag"))
@@ -158,7 +170,20 @@ class ProjectController extends Controller
 
         $project->tags()->detach();
         $project->delete();
+
+        if(!empty($project->imageUrl)){
+            Storage::delete($project->imageUrl);
+        }
+
         return redirect()->route('admin.projects.index');
+
+    }
+    public function destroyImg(Project $project)
+    {
+        Storage::delete($project->imageUrl);
+        $project->imageUrl=null;
+        $project->save();
+        return redirect()->back();
 
     }
 }

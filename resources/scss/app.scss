@@ -23,3 +23,41 @@
         }
     }
 }
+
+.edit-create-form {
+    .preview-img {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        #img-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .delete-img {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            padding: 1rem;
+            color: white;
+            background-color: red;
+            border-radius: 50%;
+            top: 1rem;
+            right: 1rem;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+    }
+}
