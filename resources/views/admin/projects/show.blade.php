@@ -11,7 +11,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-6">
-                    <img src="{{$project->imageUrl}}" alt="" class="image-fluid">
+                    <img src="{{asset('storage/'. $project->imageUrl)}}" alt="" class="image-fluid">
                 </div>
                 <div class="col-6">
                     <p>{{$project->description}}</p>                    
