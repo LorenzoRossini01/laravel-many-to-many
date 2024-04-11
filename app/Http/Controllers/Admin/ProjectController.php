@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
@@ -57,9 +58,13 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         $request->validated();
+
         $data = $request->all();
+        // dd($data);
         $project = new Project;
         $project->fill($data);
+        $img_path=Storage::put('uploads\projects', $data['imageUrl']);
+        $project->imageUrl=$img_path;
         $project->user_id=Auth::id();
         $project->slug=Str::slug($project->title);
         $project->save();

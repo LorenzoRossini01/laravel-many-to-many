@@ -27,7 +27,7 @@ class UpdateProjectRequest extends FormRequest
             "title"=>'required|string|max:150',
             "description"=>'required|string',
             "link"=>'nullable|url',
-            "imageUrl"=>'nullable|url',
+            "imageUrl"=>'nullable|image',
             'category_id'=>'required',
             'tags' => 'nullable|exists:tags,id',
         ];
