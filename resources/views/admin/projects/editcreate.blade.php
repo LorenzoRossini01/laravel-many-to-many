@@ -15,7 +15,7 @@
     @endif
 
 
-    <form action="{{isset($project)? route('admin.projects.update', $project) : route('admin.projects.store')}}" method="post">
+    <form enctype="multipart/form-data" action="{{isset($project)? route('admin.projects.update', $project) : route('admin.projects.store')}}" method="post">
         @csrf
 
         @if(isset($project))
@@ -23,6 +23,7 @@
         @endif
 
         <div class="row g-2">
+            {{-- input titolo descrizione --}}
             <div class="col-12 col-lg-6">
                 <div class="card p-2 mb-2">
                     <label for="title" class="form-label">project title</label>
@@ -33,17 +34,6 @@
                     @enderror
                 </div>
                 <div class="card p-2">
-                    <label for="imageUrl" class="form-label">project image url</label>
-                    <input type="url" id="imageUrl" name="imageUrl" class="form-control @error('imageUrl') is-invalid @enderror" value="{{isset($project)? $project->imageUrl :old('imageUrl')}}">
-                
-                    @error("imageUrl")
-                    <div class="invalid-feedback">{{$message}}</div>
-                    @enderror
-                </div>
-            </div>
-            
-            <div class="col-12 col-lg-6">
-                <div class="card p-2">
                     <label for="description" class="form-label">project description</label>
                     <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="5">{{isset($project)? $project->description :old('description')}}</textarea>
                     
@@ -52,6 +42,21 @@
                     @enderror
                 </div>
             </div>
+
+            {{-- input file img  --}}
+            <div class="col-12 col-lg-6">
+                <div class="card p-2 h-100">
+                    <label for="imageUrl" class="form-label">Immagine</label>
+                    <input type="file" name="imageUrl" id="imageUrl" class="form-control">
+                    @if(!empty($project->imageUrl))
+                    <div class="preview-img ">
+                        <img class="img-fluid w-100 mt-2 rounded" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSm0CSD7DWa8fEcafPXwwf64NnNDd0JX9xHIHfRZ4IXIQ&s" alt="">
+                    </div>
+                    @endif
+                </div>
+            </div>
+            
+            {{-- input link GitHub  --}}
             <div class="col-12 col-lg-6">
                 <div class="card p-2 h-100">
                     <label for="link" class="form-label">project GitHub link</label>
@@ -62,6 +67,8 @@
                     @enderror
                 </div>
             </div>
+
+            {{-- input categorie  --}}
             <div class="col-12 col-lg-6">
                 <div class="card p-2">
                     <div class="row g-2">
@@ -83,20 +90,26 @@
                     </div>
                 </div>
             </div>
+
+            {{-- input tecnologie  --}}
             <div class="col-12 ">
-                <div class="card p-2 d-flex flex-row justify-content-between flex-wrap">
-                    @foreach($tags as $tag)
-                    <div class="col-lg-2 col-4 form-check @error('tags') is-invalid @enderror">
-                        <input type="checkbox" id="tag-{{$tag->id}}"  value="{{ $tag->id }}" name="tag[]" 
-                        {{in_array($tag->id, old('tags',$project_tags_id??[]))?'checked':'' }}>
-                        <label for="tag-{{$tag->id}}" class="form-check-label">{{$tag->label}}</label>
+                <div class="card p-2 h-100">
+                    <label for="">Tecnologie usate</label>
+                    <div class="d-flex flex-row justify-content-between flex-wrap">
+                        @foreach($tags as $tag)
+                        <div class="col-lg-4 col-6 form-check @error('tags') is-invalid @enderror">
+                            <input type="checkbox" id="tag-{{$tag->id}}"  value="{{ $tag->id }}" name="tag[]" 
+                            {{in_array($tag->id, old('tags',$project_tags_id??[]))?'checked':'' }}>
+                            <label for="tag-{{$tag->id}}" class="form-check-label">{{$tag->label}}</label>
+                        </div>
+                        @endforeach
+                        @error("tags")
+                        <div class="invalid-feedback">{{$message}}</div>
+                        @enderror
                     </div>
-                    @endforeach
-                    @error("tags")
-                    <div class="invalid-feedback">{{$message}}</div>
-                    @enderror
                 </div>
             </div>
+
             <div class="col-12">
                 <button type="submit" class="btn btn-primary w-100 mt-2">Save project</button>
             </div>
