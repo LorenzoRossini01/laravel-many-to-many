@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Mail\EditProjectMail;
+use App\Mail\NewProjectMail;
 use App\Models\Category;
 use App\Models\Project;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -75,6 +78,9 @@ class ProjectController extends Controller
 
         if(Arr::exists($data, 'tag')){
         $project->tags()->attach($data['tag']);};
+
+
+        Mail::to('utente@mail.it')->send(new NewProjectMail($project,Auth::user()) );
 
         return redirect()->route('admin.projects.show', $project);
     }
@@ -151,6 +157,8 @@ class ProjectController extends Controller
         else
         $project->tags()->detach();
         
+        Mail::to('utente@mail.it')->send(new EditProjectMail($project,Auth::user()) );
+
 
         return redirect()->route('admin.projects.show', $project);
 
